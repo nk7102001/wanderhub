@@ -1,0 +1,39 @@
+/* ===============================
+   Star Rating INPUT (Form)
+================================ */
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.star-rating span {
+  font-size: 2rem;
+  color: #ccc;
+  margin-left: 5px;
+  transition: color 0.2s ease;
+}
+
+.star-rating span:hover,
+.star-rating span:hover ~ span {
+  color: #f5c518;
+}
+
+.star-rating .selected,
+.star-rating .selected ~ span {
+  color: #f5c518;
+}
+
+/* ===============================
+   Star Rating DISPLAY (Reviews)
+   FORCE GOLD
+================================ */
+.filled-star {
+  color: #f5c518 !important;
+  font-size: 1.4rem;
+}
+
+.empty-star {
+  color: #d3d3d3 !important;
+  font-size: 1.4rem;
+}

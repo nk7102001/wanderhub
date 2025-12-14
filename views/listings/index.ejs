@@ -1,0 +1,114 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .filter {
+    text-align: center;
+    margin-right: 1.5rem;
+    margin-top: 1.5rem;
+    opacity: 0.7;
+  }
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+  .filter p {
+    font-size: 0.8rem;
+  }
+  .active {
+    opacity: 1;
+    border-bottom: 2px solid #fe424d;
+  }
+</style>
+
+<div id="filters">
+
+  <!-- ALL LISTINGS -->
+  <a href="/listings" class="text-decoration-none text-dark">
+    <div class="filter <%= !category ? 'active' : '' %>">
+      <div><i class="fa-solid fa-list"></i></div>
+      <p>All</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Trending" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Trending' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Rooms" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Rooms' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Iconic Cities" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Iconic Cities' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Iconic Cities</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Mountains" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Mountains' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Mountains</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Castles" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Castles' ? 'active' : '' %>">
+      <div><i class="fa-brands fa-fort-awesome"></i></div>
+      <p>Castles</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Amazing Pools" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Amazing Pools' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Amazing Pools</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Camping" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Camping' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-caravan"></i></div>
+      <p>Camping</p>
+    </div>
+  </a>
+
+  <a href="/listings?category=Arctic" class="text-decoration-none text-dark">
+    <div class="filter <%= category === 'Arctic' ? 'active' : '' %>">
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <p>Arctic</p>
+    </div>
+  </a>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for (let listing of allListings) { %>
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+      <div class="card col listing-card">
+        <img
+          src="<%= listing.image.url %>"
+          class="card-img-top"
+          alt="listing_image"
+          style="height: 20rem"
+        />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= listing.title %></b><br />
+            ₹ <%= listing.price.toLocaleString("en-IN") %> / night
+          </p>
+        </div>
+      </div>
+    </a>
+  <% } %>
+</div>
