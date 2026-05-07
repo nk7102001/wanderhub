@@ -1,6 +1,6 @@
 # 🌍 WanderHub
 
- A full-stack Airbnb-inspired travel accommodation platform where users can discover, list, book, and review stays from around the world.
+A full-stack Airbnb-inspired travel accommodation platform where users can discover, list, book, and review stays from around the world.
 
 🔗 **Live Demo:** [wanderhub-nv3i.onrender.com](https://wanderhub-nv3i.onrender.com/listings)
 
@@ -11,11 +11,11 @@
 ### 🏠 Home Page
 ![Home](./screenshots/home.png)
 
-### 🏡 Listing Detail
-![Show](./screenshots/show.png)
+### 🏠 Home Page 2
+![Home 2](./screenshots/home-2.png)
 
-### 📅 Book a Stay
-![Booking](./screenshots/booking-page.png)
+### 🏡 Listing Detail & Booking
+![Booking Page](./screenshots/booking-page.png)
 
 ### 📋 My Bookings
 ![My Bookings](./screenshots/my-booking.png)
@@ -26,8 +26,17 @@
 ### 👤 User Profile
 ![Profile](./screenshots/my-profile.png)
 
+### 🗺️ Map View
+![Map](./screenshots/map.png)
+
 ### 🛡️ Admin Dashboard
 ![Admin](./screenshots/admin.png)
+
+### 🛡️ Admin Panel
+![Admin 2](./screenshots/admin-2.png)
+
+### 🔻 Footer
+![Footer](./screenshots/footer.png)
 
 ---
 
@@ -45,6 +54,7 @@
 - ❤️ Wishlist — save & view your favourite listings
 - ⭐ Star ratings + text reviews with average rating display
 - 👤 User profile with avatar, bio, phone & listing stats
+- 🗺️ Map view for listing locations
 - 🛡️ Admin dashboard — manage all users, listings & bookings with live stats
 
 ---
@@ -94,7 +104,7 @@ WANDERHUB/
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/wanderhub.git
+git clone https://github.com/nk7102001/wanderhub.git
 cd wanderhub
 
 # Install dependencies
@@ -109,5 +119,8 @@ node app.js
 
 App runs at → `http://localhost:3000`
 
+---
 
+## 👨‍💻 Author
 
+**Nischay Kumar** — [Portfolio](https://nk7102001.github.io/Main-Portfolio/) · [GitHub](https://github.com/nk7102001)
