@@ -1,4 +1,4 @@
-/* ===== ROOT VARIABLES ===== */
+/*  ROOT VARIABLES   */
 :root {
   --wh-red: #fe424d;
   --wh-red-dark: #e03540;
@@ -17,7 +17,7 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== BASE ===== */
+/*    BASE    */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
@@ -32,7 +32,7 @@ body {
 
 .page-wrapper { flex: 1; }
 
-/* ===== UTILITY ===== */
+/*  UTILITY  */
 .btn-wh {
   background: var(--wh-red) !important;
   color: white !important;
@@ -47,7 +47,7 @@ body {
 .text-wh { color: var(--wh-red) !important; }
 .bg-wh { background: var(--wh-red) !important; }
 
-/* ===== NAVBAR ===== */
+/*  NAVBAR  */
 .wh-navbar {
   background: white;
   border-bottom: 1px solid var(--wh-border);
@@ -164,7 +164,7 @@ body {
 }
 .user-dropdown .dropdown-item:hover { background: var(--wh-light); }
 
-/* ===== HERO BANNER ===== */
+/*  HERO BANNER  */
 .hero-banner {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   padding: 60px 24px;
@@ -191,7 +191,7 @@ body {
   margin: 0;
 }
 
-/* ===== FILTER BAR ===== */
+/*  FILTER BAR  */
 .filter-section {
   background: white;
   border-bottom: 1px solid var(--wh-border);
@@ -232,7 +232,7 @@ body {
 
 .results-count { font-size: 0.85rem; margin-bottom: 0; }
 
-/* ===== LISTING CARDS ===== */
+/*  LISTING CARDS  */
 .listing-card-wrapper {
   position: relative;
 }
@@ -314,7 +314,7 @@ body {
 }
 .host-cta-banner h2 { font-weight: 800; }
 
-/* ===== SHOW PAGE ===== */
+/*  SHOW PAGE  */
 .show-title { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
 .show-meta { color: var(--wh-muted); font-size: 0.95rem; }
 
@@ -387,7 +387,7 @@ body {
 .owner-actions { border-top: 1px solid var(--wh-border); padding-top: 24px; }
 
 /* Reviews */
-.reviews-section {}
+
 .review-form-card {
   background: var(--wh-light);
   border-radius: var(--radius-lg);
@@ -424,7 +424,7 @@ body {
 }
 .review-text { color: var(--wh-muted); font-size: 0.9rem; line-height: 1.6; }
 
-/* ===== FORMS ===== */
+/*  FORMS  */
 .form-page { min-height: 80vh; display: flex; align-items: center; }
 .form-card {
   background: white;
@@ -461,7 +461,7 @@ body {
 .current-img-wrapper { margin-bottom: 8px; }
 .current-img { max-height: 150px; width: auto; }
 
-/* ===== AUTH PAGES ===== */
+/*  AUTH PAGES  */
 .auth-page {
   min-height: 85vh;
   display: flex; align-items: center; justify-content: center;
@@ -535,15 +535,15 @@ body {
   display: flex; gap: 8px; padding: 8px 4px;
 }
 
-/* ===== WISHLIST ===== */
+/*  WISHLIST  */
 .active-heart i { color: var(--wh-red) !important; }
 
-/* ===== BREADCRUMB ===== */
+/*  BREADCRUMB  */
 .breadcrumb { font-size: 0.82rem; }
 .breadcrumb a { color: var(--wh-muted); text-decoration: none; }
 .breadcrumb a:hover { color: var(--wh-text); text-decoration: underline; }
 
-/* ===== ERROR PAGE ===== */
+/*  ERROR PAGE  */
 .error-page { min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .error-code { font-size: 8rem; font-weight: 900; color: var(--wh-border); line-height: 1; }
 .error-emoji { font-size: 4rem; margin: -16px 0; }
@@ -579,7 +579,7 @@ body {
 .footer-bottom a { color: rgba(255,255,255,0.45); text-decoration: none; transition: var(--transition); }
 .footer-bottom a:hover { color: white; }
 
-/* ===== TOAST FLASH ===== */
+/*  TOAST FLASH  */
 .wh-toast {
   background: white;
   border-radius: var(--radius-md) !important;
@@ -594,20 +594,20 @@ body {
 }
 .wh-toast .toast-body, .wh-toast-error .toast-body { font-weight: 500; font-size: 0.9rem; }
 
-/* ===== TRANSITIONS / ANIMATIONS ===== */
+/*  TRANSITIONS / ANIMATIONS  */
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .listing-card { animation: fadeSlideUp 0.4s ease both; }
 
-/* ===== SCROLLBAR ===== */
+/*  SCROLLBAR  */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 50px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-/* ===== RESPONSIVE ===== */
+/*  RESPONSIVE  */
 @media (max-width: 768px) {
   .hero-banner { padding: 40px 16px; }
   .hero-title { font-size: 1.8rem; }
@@ -622,9 +622,9 @@ body {
   .reviews-grid { grid-template-columns: 1fr; }
 }
 
-/* ===================================================
+/* 
    BOOKING STYLES
-   =================================================== */
+    */
 .guest-counter {
   display: flex;
   align-items: center;
@@ -725,10 +725,10 @@ body {
 .status-cancelled  { background: #fee2e2; color: #b91c1c; }
 .status-completed  { background: #e0f2fe; color: #0369a1; }
 
-/* ===================================================
+/* 
    MAP STYLES
-   =================================================== */
-.show-map-section { }
+    */
+
 .listing-map-box {
   width: 100%;
   height: 380px;
@@ -755,9 +755,9 @@ body {
 }
 .leaflet-popup-tip { display: none; }
 
-/* ===================================================
+/* 
    ADMIN STYLES
-   =================================================== */
+    */
 .admin-wrapper {
   display: flex;
   min-height: 100vh;
@@ -895,9 +895,9 @@ body {
 }
 .admin-user-avatar.sm { width: 30px; height: 30px; font-size: 0.8rem; }
 
-/* ===================================================
+/* 
    RESPONSIVE ADJUSTMENTS
-   =================================================== */
+    */
 @media (max-width: 768px) {
   .admin-wrapper { flex-direction: column; }
   .admin-sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; }
@@ -910,11 +910,11 @@ body {
   .listing-map-box { height: 260px; }
 }
 
-/* ===== PAGE HEADER ===== */
+/*  PAGE HEADER  */
 .page-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
 .page-header p   { color: var(--wh-muted); }
 
-/* ===== MOBILE BOOKING CARD FIX ===== */
+/*  MOBILE BOOKING CARD   */
 @media (max-width: 576px) {
   .booking-card         { flex-direction: column; }
   .booking-img-col      { flex: none; width: 100%; height: 160px; }
@@ -932,14 +932,14 @@ body {
   .form-card-header     { padding: 16px; }
 }
 
-/* ===== PLACEHOLDER IMAGE ===== */
+/*  PLACEHOLDER IMAGE  */
 img[src=""] {
   background: var(--wh-light);
   min-height: 200px;
   display: block;
 }
 
-/* ===== ADMIN RESPONSIVE ===== */
+/*  ADMIN RESPONSIVE  */
 @media (max-width: 991px) {
   .admin-sidebar        { width: 200px; }
   .admin-content        { padding: 16px; }
