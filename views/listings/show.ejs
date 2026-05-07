@@ -1,103 +1,267 @@
-<% layout("/layouts/boilerplate")%>
-<div class="row mt-3">
-  <div class="col-8 offset-3">
-    <h3><%=listing.title%></h3>
-  </div>
+<% layout("/layouts/boilerplate") %>
 
-  <div class="card col-6 offset-3 show-card listing-card">
-    <img
-      src="<%=listing.image.url%>"
-      class="card-img-top show-img"
-      alt="listing_image"
-    />
-    <div class="card-body">
-      <p class="card-text">Owned by: <i><%=listing.owner.username%></i></p>
-      <p class="card-text"><%=listing.description%></p>
-      <p class="card-text">₹ <%= listing.price.toLocaleString('en-IN') %></p>
-      <p class="card-text"><%=listing.location%></p>
-      <p class="card-text"><%=listing.country%></p>
+<div class="show-page container-fluid px-4 py-4">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" data-aos="fade-right">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="/listings">Listings</a></li>
+      <li class="breadcrumb-item"><a href="/listings?category=<%= listing.category %>"><%= listing.category %></a></li>
+      <li class="breadcrumb-item active"><%= listing.title %></li>
+    </ol>
+  </nav>
+
+  <!-- Title row -->
+  <div class="d-flex justify-content-between align-items-start mb-3" data-aos="fade-up">
+    <div>
+      <h1 class="show-title"><%= listing.title %></h1>
+      <p class="show-meta">
+        <span class="badge bg-wh me-2"><%= listing.category %></span>
+        <i class="fa-solid fa-location-dot me-1 text-muted"></i>
+        <%= listing.location %>, <%= listing.country %>
+        <% if (avgRating > 0) { %>
+          <span class="ms-3">
+            <i class="fa-solid fa-star text-warning me-1"></i>
+            <strong><%= avgRating %></strong>
+            <span class="text-muted">(<%= listing.reviews.length %> reviews)</span>
+          </span>
+        <% } %>
+      </p>
     </div>
-  </div>
-</div>
-<%if(currUser && listing.owner._id.equals(currUser._id)){%>
-<div class="btns mb-3">
-  <a
-    class="btn btn-dark col-1 offset-3 add-btn"
-    href="/listings/<%=listing._id%>/edit"
-    >Edit</a
-  >
-
-  <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-    <button class="btn btn-dark offset-5">Delete</button>
-  </form>
-</div>
-<%}%>
-
-<div class="col-8 offset-3 mb-3">
-  <hr />
-  <%if (currUser){%>
-  <h4>Leave a Review</h4>
-  <form
-    action="/listings/<%=listing._id%>/reviews"
-    method="post"
-    novalidate
-    class="needs-validation"
-  >
-    <div class="mb-3 mt-3">
-      <label class="form-label" for="rating">Rating</label>
-
-      <div class="star-rating">
-        <span data-value="5">&#9733;</span>
-        <span data-value="4">&#9733;</span>
-        <span data-value="3">&#9733;</span>
-        <span data-value="2">&#9733;</span>
-        <span data-value="1">&#9733;</span>
-      </div>
-
-      <!-- Hidden input to store selected rating -->
-      <input type="hidden" id="rating" name="review[rating]" required />
-    </div>
-
-    <div class="mb-3 mt-3">
-      <label class="form-label" for="comment">Comments</label>
-      <textarea
-        class="form-control"
-        name="review[comment]"
-        id="comment"
-        cols="30"
-        rows="5"
-        required
-      ></textarea>
-      <div class="invalid-feedback">Please add Some Comments</div>
-    </div>
-
-    <button class="btn btn-outline-dark mt-2">Submit</button>
-  </form>
-  <hr />
-  <%}%>
-  <div class="row">
-    <p><b>All Reviews</b></p>
-    <% for(let review of listing.reviews) { %>
-    <div class="card col-5 mb-3 ms-3">
-      <div class="card-body">
-        <div class="card-title"><%=review.author.username%></div>
-        <p class="card-text"><%=review.comment%></p>
-        <p class="card-text">
-          <% for (let i = 1; i <= 5; i++) { %> <% if (i <= review.rating) { %>
-          <span class="filled-star">&#9733;</span>
-          <% } else { %>
-          <span class="empty-star">&#9733;</span>
-          <% } %> <% } %>
-        </p>
-      </div>
-      <form
-        action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE"
-        method="post"
-        class="mb-3"
-      >
-        <button class="btn btn-sm btn-dark">Delete</button>
+    <!-- Wishlist -->
+    <% if (currUser) { %>
+      <form action="/wishlist/toggle/<%= listing._id %>" method="POST">
+        <button class="btn btn-wishlist-lg <%= isWishlisted ? 'wishlisted' : '' %>" type="submit">
+          <i class="<%= isWishlisted ? 'fa-solid' : 'fa-regular' %> fa-heart"></i>
+          <%= isWishlisted ? 'Saved' : 'Save' %>
+        </button>
       </form>
+    <% } %>
+  </div>
+
+  <!-- Hero Image -->
+  <div class="show-img-wrapper" data-aos="zoom-in">
+    <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="show-hero-img" alt="<%= listing.title %>" />
+  </div>
+
+  <!-- Main content grid -->
+  <div class="row mt-4 g-4">
+
+    <!-- Left: Details -->
+    <div class="col-lg-7" data-aos="fade-right">
+
+      <div class="show-host-row">
+        <div>
+          <h4>Hosted by <em><%= listing.owner.username %></em></h4>
+          <p class="text-muted small">Member since WanderHub</p>
+        </div>
+        <% if (listing.owner.avatar && listing.owner.avatar.url) { %>
+          <img src="<%= listing.owner.avatar.url %>" class="host-avatar" alt="host" />
+        <% } else { %>
+          <div class="host-initials"><%= listing.owner.username.charAt(0).toUpperCase() %></div>
+        <% } %>
+      </div>
+
+      <hr class="my-4" />
+
+      <!-- Description -->
+      <div class="show-description">
+        <h5><i class="fa-solid fa-align-left me-2 text-muted"></i>About this place</h5>
+        <p><%= listing.description %></p>
+      </div>
+
+      <hr class="my-4" />
+
+      <!-- Amenities placeholders -->
+      <div class="amenities-section">
+        <h5><i class="fa-solid fa-list-check me-2 text-muted"></i>What this place offers</h5>
+        <div class="row row-cols-2 g-2 mt-2">
+          <div class="col amenity-item"><i class="fa-solid fa-wifi me-2 text-muted"></i>WiFi</div>
+          <div class="col amenity-item"><i class="fa-solid fa-car me-2 text-muted"></i>Free Parking</div>
+          <div class="col amenity-item"><i class="fa-solid fa-snowflake me-2 text-muted"></i>Air Conditioning</div>
+          <div class="col amenity-item"><i class="fa-solid fa-tv me-2 text-muted"></i>TV</div>
+          <div class="col amenity-item"><i class="fa-solid fa-utensils me-2 text-muted"></i>Kitchen</div>
+          <div class="col amenity-item"><i class="fa-solid fa-water me-2 text-muted"></i>Pool Access</div>
+        </div>
+      </div>
     </div>
-    <% }%>
+
+    <!-- Right: Price card -->
+    <div class="col-lg-5" data-aos="fade-left">
+      <div class="price-card sticky-top" style="top:90px">
+        <div class="price-header">
+          <span class="price-big">₹<%= listing.price.toLocaleString("en-IN") %></span>
+          <span class="text-muted"> / night</span>
+        </div>
+        <% if (avgRating > 0) { %>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-star text-warning"></i>
+            <strong><%= avgRating %></strong>
+            <span class="text-muted">· <%= listing.reviews.length %> reviews</span>
+          </div>
+        <% } %>
+
+        <div class="price-dates">
+          <div class="date-input">
+            <label class="small text-muted">CHECK-IN</label>
+            <input type="date" class="form-control border-0 p-0" />
+          </div>
+          <div class="date-divider"></div>
+          <div class="date-input">
+            <label class="small text-muted">CHECK-OUT</label>
+            <input type="date" class="form-control border-0 p-0" />
+          </div>
+        </div>
+
+        <% if (currUser) { %>
+          <a href="/bookings/new?listingId=<%= listing._id %>" class="btn btn-wh w-100 btn-lg mt-3 rounded-pill">
+            <i class="fa-solid fa-calendar-check me-2"></i>Reserve Now
+          </a>
+        <% } else { %>
+          <a href="/login" class="btn btn-wh w-100 btn-lg mt-3 rounded-pill">
+            Login to Reserve
+          </a>
+        <% } %>
+
+        <p class="text-center small text-muted mt-2">You won't be charged yet</p>
+
+        <!-- Location info -->
+        <div class="location-info mt-3">
+          <i class="fa-solid fa-map-pin me-2 text-wh"></i>
+          <strong><%= listing.location %></strong>, <%= listing.country %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit/Delete buttons for owner -->
+  <% if (currUser && listing.owner._id.equals(currUser._id)) { %>
+    <div class="owner-actions mt-4" data-aos="fade-up">
+      <div class="d-flex gap-3">
+        <a class="btn btn-outline-dark rounded-pill px-4" href="/listings/<%= listing._id %>/edit">
+          <i class="fa-solid fa-pen me-2"></i>Edit Listing
+        </a>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+          <button class="btn btn-outline-danger rounded-pill px-4" onclick="return confirm('Delete this listing?')">
+            <i class="fa-solid fa-trash me-2"></i>Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+  <hr class="my-5" />
+  <!-- Map Section -->
+  <div class="show-map-section mt-5" data-aos="fade-up">
+    <h4><i class="fa-solid fa-map-location-dot me-2"></i>Where you'll be</h4>
+    <p class="text-muted"><i class="fa-solid fa-location-dot me-1"></i><%= listing.location %>, <%= listing.country %></p>
+    <div id="listingMap" class="listing-map-box"></div>
+  </div>
+
+  <script>
+    // Leaflet Map — free, no API key needed
+    document.addEventListener("DOMContentLoaded", () => {
+      const map = L.map("listingMap", { zoomControl: true, scrollWheelZoom: false });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(map);
+
+      const location = "<%= listing.location %>, <%= listing.country %>";
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1`)
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+            map.setView([lat, lon], 13);
+            const marker = L.marker([lat, lon]).addTo(map);
+            marker.bindPopup(`<strong><%= listing.title %></strong><br><%= listing.location %>`).openPopup();
+          } else {
+            document.getElementById("listingMap").innerHTML = '<div class="map-fallback">📍 <%= listing.location %>, <%= listing.country %></div>';
+          }
+        })
+        .catch(() => {
+          document.getElementById("listingMap").innerHTML = '<div class="map-fallback">📍 <%= listing.location %>, <%= listing.country %></div>';
+        });
+    });
+  </script>
+
+
+  <!-- Reviews Section -->
+  <div class="reviews-section" data-aos="fade-up">
+    <% if (avgRating > 0) { %>
+      <h3 class="mb-1">
+        <i class="fa-solid fa-star text-warning me-2"></i><%= avgRating %>
+        · <%= listing.reviews.length %> Review<%= listing.reviews.length !== 1 ? 's' : '' %>
+      </h3>
+    <% } else { %>
+      <h3 class="mb-1">Reviews</h3>
+    <% } %>
+
+    <!-- Add review form -->
+    <% if (currUser) { %>
+      <div class="review-form-card mt-4" data-aos="fade-up">
+        <h5>Share your experience</h5>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+          <div class="mb-3">
+            <label class="form-label small text-muted">YOUR RATING</label>
+            <div class="star-rating">
+              <span data-value="5">&#9733;</span>
+              <span data-value="4">&#9733;</span>
+              <span data-value="3">&#9733;</span>
+              <span data-value="2">&#9733;</span>
+              <span data-value="1">&#9733;</span>
+            </div>
+            <input type="hidden" id="rating" name="review[rating]" required />
+            <div class="invalid-feedback">Please select a rating</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small text-muted">YOUR REVIEW</label>
+            <textarea class="form-control" name="review[comment]" rows="3" placeholder="Tell others about your experience..." required></textarea>
+            <div class="invalid-feedback">Please write a comment</div>
+          </div>
+          <button class="btn btn-wh rounded-pill px-4">Submit Review</button>
+        </form>
+      </div>
+    <% } else { %>
+      <div class="login-to-review mt-3">
+        <i class="fa-solid fa-lock me-2"></i>
+        <a href="/login">Login</a> to leave a review
+      </div>
+    <% } %>
+
+    <!-- Reviews list -->
+    <div class="reviews-grid mt-4">
+      <% for(let review of listing.reviews) { %>
+        <div class="review-card" data-aos="fade-up">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">
+                <%= review.author.username.charAt(0).toUpperCase() %>
+              </div>
+              <div>
+                <strong><%= review.author.username %></strong>
+                <p class="small text-muted mb-0">
+                  <%= review.createdAt ? new Date(review.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long' }) : 'Recently' %>
+                </p>
+              </div>
+            </div>
+            <div class="review-stars">
+              <% for(let i = 1; i <= 5; i++) { %>
+                <i class="fa-<%= i <= review.rating ? 'solid' : 'regular' %> fa-star text-warning small"></i>
+              <% } %>
+            </div>
+          </div>
+          <p class="review-text mt-2"><%= review.comment %></p>
+          <% if (currUser && review.author._id.equals(currUser._id)) { %>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-sm btn-outline-danger rounded-pill mt-1">
+                <i class="fa-solid fa-trash me-1"></i>Delete
+              </button>
+            </form>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
   </div>
 </div>

@@ -1,39 +1,30 @@
-/* ===============================
-   Star Rating INPUT (Form)
-================================ */
+/* Star Rating */
 .star-rating {
-  direction: rtl;
-  display: inline-flex;
-  cursor: pointer;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: 8px 0;
 }
 
 .star-rating span {
-  font-size: 2rem;
-  color: #ccc;
-  margin-left: 5px;
-  transition: color 0.2s ease;
+  font-size: 1.8rem;
+  color: #d4d4d4;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+  user-select: none;
 }
 
 .star-rating span:hover,
 .star-rating span:hover ~ span {
-  color: #f5c518;
+  color: #fbbf24;
+  transform: scale(1.15);
 }
 
-.star-rating .selected,
-.star-rating .selected ~ span {
-  color: #f5c518;
+.star-rating span.selected,
+.star-rating span.selected ~ span {
+  color: #f59e0b;
 }
 
-/* ===============================
-   Star Rating DISPLAY (Reviews)
-   FORCE GOLD
-================================ */
-.filled-star {
-  color: #f5c518 !important;
-  font-size: 1.4rem;
-}
-
-.empty-star {
-  color: #d3d3d3 !important;
-  font-size: 1.4rem;
-}
+.filled-star { color: #f59e0b; }
+.empty-star  { color: #d1d5db; }

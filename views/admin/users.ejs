@@ -1,0 +1,52 @@
+<% layout("/layouts/boilerplate") %>
+<% const page = 'users' %>
+<div class="admin-wrapper">
+  <%- include("../includes/admin-sidebar") %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h4 class="mb-0 fw-bold"><i class="fa-solid fa-users me-2"></i>All Users</h4>
+      <span class="text-muted small"><%= users.length %> registered</span>
+    </div>
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="table-responsive">
+          <table class="table table-hover admin-table align-middle">
+            <thead><tr><th>User</th><th>Email</th><th>Listings</th><th>Joined</th><th>Role</th><th>Actions</th></tr></thead>
+            <tbody>
+              <% users.forEach(u => { %>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="admin-user-avatar sm"><%= u.username.charAt(0).toUpperCase() %></div>
+                    <strong><%= u.username %></strong>
+                  </div>
+                </td>
+                <td class="text-muted small"><%= u.email %></td>
+                <td><span class="badge bg-light text-dark border"><%= u.listingCount %></span></td>
+                <td class="text-muted small"><%= new Date(u.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></td>
+                <td>
+                  <% if (u.isAdmin) { %>
+                    <span class="badge bg-danger">Admin</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary">User</span>
+                  <% } %>
+                </td>
+                <td>
+                  <% if (!u.isAdmin) { %>
+                    <form action="/admin/users/<%= u._id %>/delete" method="POST"
+                      onsubmit="return confirm('Delete this user?')">
+                      <button class="btn btn-sm btn-outline-danger rounded-pill px-2">Delete</button>
+                    </form>
+                  <% } else { %>
+                    <span class="text-muted small">Protected</span>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

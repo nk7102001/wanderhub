@@ -1,22 +1,15 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const stars = document.querySelectorAll(".star-rating span");
   const ratingInput = document.getElementById("rating");
 
-  if (!stars.length) return;
-
-  stars.forEach((star) => {
-    star.addEventListener("click", function () {
-      const value = this.getAttribute("data-value");
-      ratingInput.value = value;
-
-      stars.forEach((s) => s.classList.remove("selected"));
-      this.classList.add("selected");
-
-      let prev = this.previousElementSibling;
-      while (prev) {
-        prev.classList.add("selected");
-        prev = prev.previousElementSibling;
-      }
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      const val = parseInt(star.getAttribute("data-value"));
+      if (ratingInput) ratingInput.value = val;
+      stars.forEach(s => {
+        const sv = parseInt(s.getAttribute("data-value"));
+        s.classList.toggle("selected", sv <= val);
+      });
     });
   });
 });

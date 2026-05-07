@@ -1,0 +1,193 @@
+<% layout("/layouts/boilerplate") %>
+<% const page = "dashboard" %>
+
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <%- include("../includes/admin-sidebar") %>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h4 class="mb-0 fw-bold">Dashboard</h4>
+      <span class="text-muted small">Welcome back, <%= currUser.username %> 👋</span>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Stat Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="0">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-primary-soft">
+              <i class="fa-solid fa-house text-primary"></i>
+            </div>
+            <div class="admin-stat-val"><%= stats.totalListings %></div>
+            <div class="admin-stat-lbl">Total Listings</div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="50">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-success-soft">
+              <i class="fa-solid fa-users text-success"></i>
+            </div>
+            <div class="admin-stat-val"><%= stats.totalUsers %></div>
+            <div class="admin-stat-lbl">Total Users</div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-warning-soft">
+              <i class="fa-solid fa-star text-warning"></i>
+            </div>
+            <div class="admin-stat-val"><%= stats.totalReviews %></div>
+            <div class="admin-stat-lbl">Reviews</div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="150">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-danger-soft">
+              <i class="fa-solid fa-calendar-check text-danger"></i>
+            </div>
+            <div class="admin-stat-val"><%= stats.totalBookings %></div>
+            <div class="admin-stat-lbl">Bookings</div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-purple-soft">
+              <i class="fa-solid fa-indian-rupee-sign" style="color:#8b5cf6"></i>
+            </div>
+            <div class="admin-stat-val">₹<%= (stats.totalRevenue/1000).toFixed(0) %>k</div>
+            <div class="admin-stat-lbl">Revenue</div>
+          </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="250">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon bg-teal-soft">
+              <i class="fa-solid fa-chart-line" style="color:#0d9488"></i>
+            </div>
+            <div class="admin-stat-val">₹<%= stats.avgBookingValue.toLocaleString("en-IN") %></div>
+            <div class="admin-stat-lbl">Avg Booking</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <!-- Category Chart -->
+        <div class="col-lg-5" data-aos="fade-right">
+          <div class="admin-card">
+            <h6 class="admin-card-title">Listings by Category</h6>
+            <canvas id="categoryChart" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Recent Bookings -->
+        <div class="col-lg-7" data-aos="fade-left">
+          <div class="admin-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="admin-card-title mb-0">Recent Bookings</h6>
+              <a href="/admin/bookings" class="btn btn-sm btn-outline-dark rounded-pill">View All</a>
+            </div>
+            <% if (recentBookings.length === 0) { %>
+              <p class="text-muted small">No bookings yet.</p>
+            <% } else { %>
+              <div class="table-responsive">
+                <table class="table table-hover admin-table">
+                  <thead><tr><th>Guest</th><th>Listing</th><th>Dates</th><th>Amount</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <% recentBookings.forEach(b => { %>
+                      <% if (!b.listing || !b.guest) return; %>
+                      <tr>
+                        <td><strong><%= b.guest.username %></strong></td>
+                        <td class="text-muted"><%= b.listing.title.substring(0,22) %>...</td>
+                        <td class="small text-muted">
+                          <%= new Date(b.checkIn).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %> →
+                          <%= new Date(b.checkOut).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %>
+                        </td>
+                        <td class="fw-semibold">₹<%= b.totalPrice.toLocaleString("en-IN") %></td>
+                        <td><span class="booking-status-badge status-<%= b.status %>"><%= b.status %></span></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Recent Listings -->
+        <div class="col-lg-7" data-aos="fade-right">
+          <div class="admin-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="admin-card-title mb-0">Recent Listings</h6>
+              <a href="/admin/listings" class="btn btn-sm btn-outline-dark rounded-pill">View All</a>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover admin-table">
+                <thead><tr><th>Image</th><th>Title</th><th>Owner</th><th>Price</th><th>Category</th></tr></thead>
+                <tbody>
+                  <% recentListings.forEach(l => { %>
+                    <tr>
+                      <td><img src="<%= l.image && l.image.url ? l.image.url : '' %>" class="admin-thumb" /></td>
+                      <td><a href="/listings/<%= l._id %>" class="text-dark fw-semibold"><%= l.title.substring(0,25) %></a></td>
+                      <td class="text-muted"><%= l.owner ? l.owner.username : 'N/A' %></td>
+                      <td>₹<%= l.price.toLocaleString("en-IN") %></td>
+                      <td><span class="badge bg-light text-dark border"><%= l.category %></span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="col-lg-5" data-aos="fade-left">
+          <div class="admin-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="admin-card-title mb-0">New Users</h6>
+              <a href="/admin/users" class="btn btn-sm btn-outline-dark rounded-pill">View All</a>
+            </div>
+            <% recentUsers.forEach(u => { %>
+              <div class="admin-user-row">
+                <div class="admin-user-avatar"><%= u.username.charAt(0).toUpperCase() %></div>
+                <div>
+                  <div class="fw-semibold"><%= u.username %></div>
+                  <div class="text-muted small"><%= u.email %></div>
+                </div>
+                <div class="ms-auto text-muted small">
+                  <%= new Date(u.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const catLabels = <%- JSON.stringify(categoryStats.map(c => c._id)) %>;
+  const catCounts = <%- JSON.stringify(categoryStats.map(c => c.count)) %>;
+  const colors = ["#fe424d","#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#84cc16","#f97316","#ec4899","#14b8a6"];
+
+  new Chart(document.getElementById("categoryChart"), {
+    type: "doughnut",
+    data: {
+      labels: catLabels,
+      datasets: [{ data: catCounts, backgroundColor: colors, borderWidth: 2, borderColor: "#fff" }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } }
+      },
+      cutout: "65%"
+    }
+  });
+</script>

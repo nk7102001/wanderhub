@@ -1,37 +1,64 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Signup on WanderHub</h1>
-  <div class="col-6 offset-3">
-    <form action="/signup" method="post" class="needs-validation" novalidate> 
-        <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          class="form-control"
-          required/>
-        <div class="invalid-feedback">Invalid Username</div>
+
+<div class="auth-page">
+  <div class="auth-card" data-aos="fade-up">
+    <div class="auth-logo">
+      <i class="fa-regular fa-compass"></i>
+      <span>WanderHub</span>
+    </div>
+    <h2 class="auth-title">Create your account</h2>
+    <p class="auth-sub text-muted">Start exploring amazing places today</p>
+
+    <form action="/signup" method="POST" class="needs-validation mt-4" novalidate>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Username</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user text-muted"></i></span>
+          <input type="text" name="username" class="form-control border-start-0 ps-0" placeholder="Choose a username" required />
+        </div>
+        <div class="invalid-feedback">Please choose a username</div>
       </div>
-        <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          class="form-control"
-          required/>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+          <input type="email" name="email" class="form-control border-start-0 ps-0" placeholder="you@example.com" required />
+        </div>
+        <div class="invalid-feedback">Please enter a valid email</div>
       </div>
-        <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          class="form-control"
-          required/>
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Password</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+          <input type="password" name="password" id="passwordInput" class="form-control border-start-0 ps-0" placeholder="Min. 6 characters" required minlength="6" />
+          <span class="input-group-text bg-light" style="cursor:pointer" onclick="togglePw()">
+            <i class="fa-solid fa-eye text-muted" id="eyeIcon"></i>
+          </span>
+        </div>
+        <div class="invalid-feedback">Password must be at least 6 characters</div>
       </div>
-      <button class="btn btn-success mb-2">SignUp</button>
+
+      <button class="btn btn-wh w-100 btn-lg rounded-pill">
+        <i class="fa-solid fa-user-plus me-2"></i>Create Account
+      </button>
     </form>
+
+    <p class="text-center mt-4 text-muted">
+      Already have an account? <a href="/login" class="fw-semibold text-wh">Login here</a>
+    </p>
   </div>
 </div>
+
+<script>
+function togglePw() {
+  const inp = document.getElementById("passwordInput");
+  const icon = document.getElementById("eyeIcon");
+  if (inp.type === "password") {
+    inp.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    inp.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
+}
+</script>

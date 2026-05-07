@@ -1,0 +1,35 @@
+<% layout("/layouts/boilerplate") %>
+<% const page = 'bookings' %>
+<div class="admin-wrapper">
+  <%- include("../includes/admin-sidebar") %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h4 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-check me-2"></i>All Bookings</h4>
+      <span class="text-muted small"><%= bookings.length %> total</span>
+    </div>
+    <div class="admin-content">
+      <div class="admin-card">
+        <div class="table-responsive">
+          <table class="table table-hover admin-table align-middle">
+            <thead><tr><th>Guest</th><th>Listing</th><th>Check-In</th><th>Check-Out</th><th>Nights</th><th>Guests</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <% bookings.forEach(b => { %>
+                <% if (!b.listing || !b.guest) return; %>
+                <tr>
+                  <td><strong><%= b.guest.username %></strong></td>
+                  <td><a href="/listings/<%= b.listing._id %>" class="text-dark"><%= b.listing.title.substring(0,25) %>...</a></td>
+                  <td class="small"><%= new Date(b.checkIn).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></td>
+                  <td class="small"><%= new Date(b.checkOut).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></td>
+                  <td class="text-center"><%= b.nights %></td>
+                  <td class="text-center"><%= b.guests %></td>
+                  <td class="fw-bold">₹<%= b.totalPrice.toLocaleString("en-IN") %></td>
+                  <td><span class="booking-status-badge status-<%= b.status %>"><%= b.status %></span></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

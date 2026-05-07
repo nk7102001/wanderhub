@@ -1,0 +1,163 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5">
+  <div class="row justify-content-center g-4">
+
+    <!-- Booking Form -->
+    <div class="col-lg-6" data-aos="fade-right">
+      <div class="form-card">
+        <div class="form-card-header">
+          <i class="fa-solid fa-calendar-check me-2"></i>
+          <h3 class="mb-0">Book Your Stay</h3>
+          <p class="text-muted small mt-1 mb-0">Fill in your dates to confirm</p>
+        </div>
+        <div class="form-card-body">
+          <form action="/bookings" method="POST" class="needs-validation" novalidate id="bookingForm">
+            <input type="hidden" name="listingId" value="<%= listing._id %>" />
+
+            <!-- Dates -->
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <label class="form-label fw-semibold">Check-In</label>
+                <input type="date" name="checkIn" id="checkIn"
+                  class="form-control rounded-3"
+                  min="<%= new Date().toISOString().split('T')[0] %>"
+                  required />
+                <div class="invalid-feedback">Select check-in date</div>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">Check-Out</label>
+                <input type="date" name="checkOut" id="checkOut"
+                  class="form-control rounded-3"
+                  min="<%= new Date().toISOString().split('T')[0] %>"
+                  required />
+                <div class="invalid-feedback">Select check-out date</div>
+              </div>
+            </div>
+
+            <!-- Guests -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Number of Guests</label>
+              <div class="guest-counter">
+                <button type="button" class="counter-btn" onclick="changeGuests(-1)">−</button>
+                <input type="number" name="guests" id="guestCount"
+                  class="form-control text-center border-0 fw-bold"
+                  value="1" min="1" max="16" readonly />
+                <button type="button" class="counter-btn" onclick="changeGuests(1)">+</button>
+              </div>
+            </div>
+
+            <!-- Special Requests -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Special Requests <span class="text-muted fw-normal">(optional)</span></label>
+              <textarea name="specialRequests" class="form-control rounded-3" rows="3"
+                placeholder="Any special requirements or requests?"></textarea>
+            </div>
+
+            <!-- Price Summary -->
+            <div class="price-summary mb-4" id="priceSummary" style="display:none">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">₹<%= listing.price.toLocaleString("en-IN") %> × <span id="nightsCount">0</span> nights</span>
+                <span id="subtotal" class="fw-semibold"></span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Service fee (5%)</span>
+                <span id="serviceFee" class="fw-semibold"></span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <span class="fw-bold">Total</span>
+                <span id="totalAmount" class="fw-bold text-wh fs-5"></span>
+              </div>
+            </div>
+
+            <!-- Booked Dates Warning -->
+            <% if (existingBookings.length > 0) { %>
+              <div class="alert alert-warning rounded-3 small mb-4">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+                <strong>Some dates are already booked.</strong> Please check availability before confirming.
+              </div>
+            <% } %>
+
+            <button class="btn btn-wh w-100 btn-lg rounded-pill" id="bookBtn" disabled>
+              <i class="fa-solid fa-lock me-2"></i>Confirm & Reserve
+            </button>
+            <p class="text-center text-muted small mt-2">Select dates to enable booking</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Listing Summary -->
+    <div class="col-lg-4" data-aos="fade-left">
+      <div class="booking-listing-card">
+        <img src="<%= listing.image && listing.image.url ? listing.image.url : "" %>" class="booking-listing-img" alt="<%= listing.title %>" />
+        <div class="p-3">
+          <span class="badge bg-wh mb-2"><%= listing.category %></span>
+          <h5 class="fw-bold"><%= listing.title %></h5>
+          <p class="text-muted small mb-1"><i class="fa-solid fa-location-dot me-1"></i><%= listing.location %>, <%= listing.country %></p>
+          <p class="fw-bold">₹<%= listing.price.toLocaleString("en-IN") %> <span class="text-muted fw-normal small">/ night</span></p>
+        </div>
+
+        <!-- Unavailable dates legend -->
+        <% if (existingBookings.length > 0) { %>
+        <div class="px-3 pb-3">
+          <p class="small fw-semibold text-muted mb-2">🔴 Already booked:</p>
+          <% existingBookings.forEach(b => { %>
+            <div class="booked-date-pill">
+              <%= new Date(b.checkIn).toLocaleDateString('en-IN', {day:'numeric',month:'short'}) %>
+              → <%= new Date(b.checkOut).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %>
+            </div>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+
+      <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary w-100 rounded-pill mt-3">
+        <i class="fa-solid fa-arrow-left me-2"></i>Back to Listing
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pricePerNight = <%= listing.price %>;
+  const checkInEl  = document.getElementById("checkIn");
+  const checkOutEl = document.getElementById("checkOut");
+  const bookBtn    = document.getElementById("bookBtn");
+
+  function changeGuests(delta) {
+    const el = document.getElementById("guestCount");
+    const val = parseInt(el.value) + delta;
+    if (val >= 1 && val <= 16) el.value = val;
+  }
+
+  function updateSummary() {
+    const ci = new Date(checkInEl.value);
+    const co = new Date(checkOutEl.value);
+    if (!checkInEl.value || !checkOutEl.value || co <= ci) {
+      document.getElementById("priceSummary").style.display = "none";
+      bookBtn.disabled = true;
+      bookBtn.innerHTML = '<i class="fa-solid fa-lock me-2"></i>Confirm & Reserve';
+      return;
+    }
+    const nights = Math.round((co - ci) / (1000 * 60 * 60 * 24));
+    const subtotal = pricePerNight * nights;
+    const fee = Math.round(subtotal * 0.05);
+    const total = subtotal + fee;
+
+    document.getElementById("nightsCount").textContent = nights;
+    document.getElementById("subtotal").textContent = "₹" + subtotal.toLocaleString("en-IN");
+    document.getElementById("serviceFee").textContent = "₹" + fee.toLocaleString("en-IN");
+    document.getElementById("totalAmount").textContent = "₹" + total.toLocaleString("en-IN");
+    document.getElementById("priceSummary").style.display = "block";
+    bookBtn.disabled = false;
+    bookBtn.innerHTML = `<i class="fa-solid fa-calendar-check me-2"></i>Reserve for ₹${total.toLocaleString("en-IN")}`;
+  }
+
+  checkInEl.addEventListener("change", () => {
+    checkOutEl.min = checkInEl.value;
+    updateSummary();
+  });
+  checkOutEl.addEventListener("change", updateSummary);
+</script>

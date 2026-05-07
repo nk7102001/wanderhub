@@ -1,114 +1,156 @@
 <% layout("/layouts/boilerplate") %>
 
-<style>
-  #filters {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .filter {
-    text-align: center;
-    margin-right: 1.5rem;
-    margin-top: 1.5rem;
-    opacity: 0.7;
-  }
-  .filter:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-  .filter p {
-    font-size: 0.8rem;
-  }
-  .active {
-    opacity: 1;
-    border-bottom: 2px solid #fe424d;
-  }
-</style>
-
-<div id="filters">
-
-  <!-- ALL LISTINGS -->
-  <a href="/listings" class="text-decoration-none text-dark">
-    <div class="filter <%= !category ? 'active' : '' %>">
-      <div><i class="fa-solid fa-list"></i></div>
-      <p>All</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Trending" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Trending' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-fire"></i></div>
-      <p>Trending</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Rooms" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Rooms' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-bed"></i></div>
-      <p>Rooms</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Iconic Cities" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Iconic Cities' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-mountain-city"></i></div>
-      <p>Iconic Cities</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Mountains" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Mountains' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-mountain"></i></div>
-      <p>Mountains</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Castles" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Castles' ? 'active' : '' %>">
-      <div><i class="fa-brands fa-fort-awesome"></i></div>
-      <p>Castles</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Amazing Pools" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Amazing Pools' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-person-swimming"></i></div>
-      <p>Amazing Pools</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Camping" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Camping' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-caravan"></i></div>
-      <p>Camping</p>
-    </div>
-  </a>
-
-  <a href="/listings?category=Arctic" class="text-decoration-none text-dark">
-    <div class="filter <%= category === 'Arctic' ? 'active' : '' %>">
-      <div><i class="fa-solid fa-snowflake"></i></div>
-      <p>Arctic</p>
-    </div>
-  </a>
+<!-- Hero Banner -->
+<div class="hero-banner">
+  <div class="hero-content" data-aos="fade-up">
+    <h1 class="hero-title">Find Your Perfect Stay</h1>
+    <p class="hero-sub">Discover amazing places around the world</p>
+  </div>
 </div>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-  <% for (let listing of allListings) { %>
-    <a href="/listings/<%= listing._id %>" class="listing-link">
-      <div class="card col listing-card">
-        <img
-          src="<%= listing.image.url %>"
-          class="card-img-top"
-          alt="listing_image"
-          style="height: 20rem"
-        />
-        <div class="card-img-overlay"></div>
-        <div class="card-body">
-          <p class="card-text">
-            <b><%= listing.title %></b><br />
-            ₹ <%= listing.price.toLocaleString("en-IN") %> / night
-          </p>
-        </div>
+<!-- Filter Bar -->
+<!-- Filter Bar -->
+<div class="filter-section sticky-filters">
+  <div class="container-fluid px-4">
+    <div class="d-flex align-items-center gap-2">
+      
+      <!-- Filter chips scroll -->
+      <div class="d-flex align-items-center gap-2 overflow-auto pb-1 filter-scroll flex-grow-1">
+        <a href="/listings" class="filter-chip <%= !category ? 'active' : '' %>">
+          <i class="fa-solid fa-border-all"></i><span>All</span>
+        </a>
+        <a href="/listings?category=Trending" class="filter-chip <%= category === 'Trending' ? 'active' : '' %>">
+          <i class="fa-solid fa-fire"></i><span>Trending</span>
+        </a>
+        <a href="/listings?category=Rooms" class="filter-chip <%= category === 'Rooms' ? 'active' : '' %>">
+          <i class="fa-solid fa-bed"></i><span>Rooms</span>
+        </a>
+        <a href="/listings?category=Iconic Cities" class="filter-chip <%= category === 'Iconic Cities' ? 'active' : '' %>">
+          <i class="fa-solid fa-mountain-city"></i><span>Iconic Cities</span>
+        </a>
+        <a href="/listings?category=Mountains" class="filter-chip <%= category === 'Mountains' ? 'active' : '' %>">
+          <i class="fa-solid fa-mountain"></i><span>Mountains</span>
+        </a>
+        <a href="/listings?category=Beaches" class="filter-chip <%= category === 'Beaches' ? 'active' : '' %>">
+          <i class="fa-solid fa-umbrella-beach"></i><span>Beaches</span>
+        </a>
+        <a href="/listings?category=Castles" class="filter-chip <%= category === 'Castles' ? 'active' : '' %>">
+          <i class="fa-brands fa-fort-awesome"></i><span>Castles</span>
+        </a>
+        <a href="/listings?category=Amazing Pools" class="filter-chip <%= category === 'Amazing Pools' ? 'active' : '' %>">
+          <i class="fa-solid fa-person-swimming"></i><span>Pools</span>
+        </a>
+        <a href="/listings?category=Camping" class="filter-chip <%= category === 'Camping' ? 'active' : '' %>">
+          <i class="fa-solid fa-campground"></i><span>Camping</span>
+        </a>
+        <a href="/listings?category=Farms" class="filter-chip <%= category === 'Farms' ? 'active' : '' %>">
+          <i class="fa-solid fa-tractor"></i><span>Farms</span>
+        </a>
+        <a href="/listings?category=Arctic" class="filter-chip <%= category === 'Arctic' ? 'active' : '' %>">
+          <i class="fa-solid fa-snowflake"></i><span>Arctic</span>
+        </a>
+        <a href="/listings?category=Luxury" class="filter-chip <%= category === 'Luxury' ? 'active' : '' %>">
+          <i class="fa-solid fa-crown"></i><span>Luxury</span>
+        </a>
       </div>
-    </a>
+
+      <!-- Sort dropdown — bahar, fixed right side -->
+      <div class="dropdown sort-dropdown flex-shrink-0">
+        <button class="btn btn-outline-secondary btn-sm dropdown-toggle rounded-pill" data-bs-toggle="dropdown">
+          <i class="fa-solid fa-sort me-1"></i>Sort
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow">
+          <li><a class="dropdown-item" href="?<%= category ? 'category='+category+'&' : '' %><%= search ? 'search='+search+'&' : '' %>sort=newest">Newest First</a></li>
+          <li><a class="dropdown-item" href="?<%= category ? 'category='+category+'&' : '' %><%= search ? 'search='+search+'&' : '' %>sort=price-low">Price: Low to High</a></li>
+          <li><a class="dropdown-item" href="?<%= category ? 'category='+category+'&' : '' %><%= search ? 'search='+search+'&' : '' %>sort=price-high">Price: High to Low</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Results Info -->
+<div class="container-fluid px-4 mt-3">
+  <p class="results-count text-muted">
+    <% if (search) { %>
+      <i class="fa-solid fa-magnifying-glass me-1"></i>
+      Showing results for "<strong><%= search %></strong>" — <%= allListings.length %> found
+    <% } else if (category) { %>
+      <i class="fa-solid fa-filter me-1"></i>
+      <%= allListings.length %> places in <strong><%= category %></strong>
+    <% } else { %>
+      <i class="fa-solid fa-globe me-1"></i>
+      <%= allListings.length %> amazing places worldwide
+    <% } %>
+  </p>
+</div>
+
+<!-- Listings Grid -->
+<div class="container-fluid px-4">
+  <% if (allListings.length === 0) { %>
+    <div class="empty-state" data-aos="fade-up">
+      <i class="fa-solid fa-map-location-dot"></i>
+      <h3>No listings found</h3>
+      <p>Try adjusting your search or explore a different category</p>
+      <a href="/listings" class="btn btn-wh mt-2">View All Listings</a>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mt-1">
+      <% for (let listing of allListings) { %>
+        <div class="col" data-aos="fade-up">
+          <div class="listing-card-wrapper">
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+              <div class="listing-card">
+                <div class="card-img-wrapper">
+                  <img
+                    src="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
+                    class="listing-img"
+                    alt="<%= listing.title %>"
+                    loading="lazy"
+                  />
+                  <div class="category-badge">
+                    <%= listing.category %>
+                  </div>
+                  <div class="img-overlay"></div>
+                </div>
+                <div class="listing-info">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <h6 class="listing-title"><%= listing.title %></h6>
+                  </div>
+                  <p class="listing-location">
+                    <i class="fa-solid fa-location-dot me-1"></i>
+                    <%= listing.location %>, <%= listing.country %>
+                  </p>
+                  <p class="listing-price">
+                    <strong>₹<%= listing.price.toLocaleString("en-IN") %></strong>
+                    <span class="text-muted"> / night</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+            <!-- Quick wishlist button -->
+            <% if (currUser) { %>
+              <form action="/wishlist/toggle/<%= listing._id %>" method="POST" class="wishlist-quick-btn">
+                <button type="submit" class="btn-wishlist-quick" title="Save to wishlist">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </div>
   <% } %>
 </div>
+
+<!-- Add listing CTA for non-logged users -->
+<% if (!currUser) { %>
+<div class="host-cta-banner" data-aos="fade-up">
+  <div class="container text-center py-5">
+    <h2>Have a place to share?</h2>
+    <p class="text-muted">List your property on WanderHub and start earning</p>
+    <a href="/signup" class="btn btn-wh btn-lg rounded-pill px-5">Get Started</a>
+  </div>
+</div>
+<% } %>

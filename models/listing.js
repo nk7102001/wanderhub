@@ -1,51 +1,26 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
-const User = require("./user.js");
 
 const listingSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
+  title: { type: String, required: true },
   description: String,
-
-  image: {
-    url: String,
-    filename: String,
-  },
-
+  image: { url: String, filename: String },
   price: Number,
   location: String,
   country: String,
-
   category: {
     type: String,
     required: true,
     enum: [
-      "Trending",
-      "Rooms",
-      "Iconic Cities",
-      "Mountains",
-      "Castles",
-      "Amazing Pools",
-      "Camping",
-      "Farms",
-      "Arctic",
+      "Trending", "Rooms", "Iconic Cities", "Mountains",
+      "Castles", "Amazing Pools", "Camping", "Farms",
+      "Arctic", "Beaches", "Luxury"
     ],
   },
-
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Review",
-    },
-  ],
-
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
+  createdAt: { type: Date, default: Date.now },
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

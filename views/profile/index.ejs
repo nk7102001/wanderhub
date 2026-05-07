@@ -1,0 +1,131 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5">
+  <!-- Profile Header -->
+  <div class="profile-header" data-aos="fade-up">
+    <div class="profile-cover"></div>
+    <div class="profile-body">
+      <div class="profile-avatar-wrapper">
+        <% if (user.avatar && user.avatar.url) { %>
+          <img src="<%= user.avatar.url %>" class="profile-avatar" alt="avatar" />
+        <% } else { %>
+          <div class="profile-initials-lg">
+            <%= user.username.charAt(0).toUpperCase() %>
+          </div>
+        <% } %>
+      </div>
+      <div class="profile-info">
+        <h2><%= user.username %></h2>
+        <p class="text-muted"><i class="fa-solid fa-envelope me-1"></i><%= user.email %></p>
+        <% if (user.phone) { %>
+          <p class="text-muted"><i class="fa-solid fa-phone me-1"></i><%= user.phone %></p>
+        <% } %>
+        <% if (user.bio) { %>
+          <p class="profile-bio"><%= user.bio %></p>
+        <% } %>
+        <p class="text-muted small">
+          <i class="fa-solid fa-calendar me-1"></i>
+          Member since <%= new Date(user.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long' }) %>
+        </p>
+      </div>
+      <a href="/profile/edit" class="btn btn-outline-dark rounded-pill px-4 ms-auto">
+        <i class="fa-solid fa-pen me-2"></i>Edit Profile
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="row g-3 mt-3 mb-4" data-aos="fade-up">
+    <div class="col-md-4">
+      <div class="stat-card text-center">
+        <div class="stat-number"><%= myListings.length %></div>
+        <div class="stat-label">Listings</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card text-center">
+        <div class="stat-number"><%= user.wishlist.length %></div>
+        <div class="stat-label">Wishlist</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card text-center">
+        <div class="stat-number"><a href="/bookings/my" class="text-decoration-none text-dark">View →</a></div>
+        <div class="stat-label">My Bookings</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Listings -->
+  <div class="mb-4" data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4><i class="fa-solid fa-house me-2"></i>My Listings (<%= myListings.length %>)</h4>
+      <a href="/listings/new" class="btn btn-wh rounded-pill px-4">
+        <i class="fa-solid fa-plus me-1"></i>Add New
+      </a>
+    </div>
+
+    <% if (myListings.length === 0) { %>
+      <div class="empty-state py-4">
+        <i class="fa-solid fa-house-circle-plus fa-2x text-muted mb-2"></i>
+        <p>You haven't listed any properties yet.</p>
+        <a href="/listings/new" class="btn btn-wh rounded-pill">List Your Property</a>
+      </div>
+    <% } else { %>
+      <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 g-3">
+        <% for (let listing of myListings) { %>
+          <div class="col" data-aos="fade-up">
+            <div class="listing-card-wrapper">
+              <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="listing-card">
+                  <div class="card-img-wrapper">
+                    <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="listing-img" alt="<%= listing.title %>" loading="lazy" />
+                    <div class="category-badge"><%= listing.category %></div>
+                  </div>
+                  <div class="listing-info">
+                    <h6 class="listing-title"><%= listing.title %></h6>
+                    <p class="listing-location"><i class="fa-solid fa-location-dot me-1"></i><%= listing.location %></p>
+                    <p class="listing-price"><strong>₹<%= listing.price.toLocaleString("en-IN") %></strong> / night</p>
+                  </div>
+                </div>
+              </a>
+              <div class="listing-owner-actions">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm btn-outline-dark rounded-pill">Edit</a>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
+                  <button class="btn btn-sm btn-outline-danger rounded-pill" onclick="return confirm('Delete?')">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Wishlist Preview -->
+  <% if (user.wishlist.length > 0) { %>
+  <div data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4><i class="fa-solid fa-heart text-danger me-2"></i>Saved Places</h4>
+      <a href="/wishlist" class="btn btn-outline-danger rounded-pill px-4">View All</a>
+    </div>
+    <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 g-3">
+      <% for (let listing of user.wishlist.slice(0, 4)) { %>
+        <div class="col">
+          <a href="/listings/<%= listing._id %>" class="listing-link">
+            <div class="listing-card">
+              <div class="card-img-wrapper">
+                <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="listing-img" alt="<%= listing.title %>" loading="lazy" />
+              </div>
+              <div class="listing-info">
+                <h6 class="listing-title"><%= listing.title %></h6>
+                <p class="listing-location"><i class="fa-solid fa-location-dot me-1"></i><%= listing.location %></p>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+</div>

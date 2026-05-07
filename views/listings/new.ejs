@@ -1,117 +1,185 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <h3>Create New Listing</h3>
+<div class="container py-5" data-aos="fade-up">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8 col-xl-7">
 
-    <form
-      action="/listings"
-      method="POST"
-      novalidate
-      class="needs-validation"
-      enctype="multipart/form-data"
-    >
-
-      <!-- TITLE -->
-      <div class="mb-3">
-        <label class="form-label">Title</label>
-        <input
-          type="text"
-          name="listing[title]"
-          placeholder="Enter title"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Title should be valid</div>
+      <!-- Header -->
+      <div class="mb-4">
+        <h2 class="fw-bold mb-1"><i class="fa-solid fa-house-chimney-circle-plus me-2 text-danger"></i>List Your Property</h2>
+        <p class="text-muted">Fill in the details below to create your listing</p>
       </div>
 
-      <!-- DESCRIPTION -->
-      <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea
-          name="listing[description]"
-          class="form-control"
-          required
-        ></textarea>
-        <div class="invalid-feedback">Please enter a description</div>
+      <div style="background:white; border:1.5px solid #e5e5e5; border-radius:16px; padding:32px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+
+          <!-- Title -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Property Title</label>
+            <input
+              type="text"
+              name="listing[title]"
+              placeholder="e.g. Cozy Mountain Cabin with Lake View"
+              class="form-control form-control-lg"
+              style="border-radius:10px;"
+              required
+            />
+            <div class="invalid-feedback">Please enter a title</div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Description</label>
+            <textarea
+              name="listing[description]"
+              class="form-control"
+              style="border-radius:10px;"
+              rows="4"
+              placeholder="Describe your property — what makes it special?"
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please add a description</div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Category</label>
+            <select name="listing[category]" class="form-select form-select-lg" style="border-radius:10px;" required>
+              <option value="">— Select a Category —</option>
+              <option value="Trending">🔥 Trending</option>
+              <option value="Rooms">🛏️ Rooms</option>
+              <option value="Iconic Cities">🏙️ Iconic Cities</option>
+              <option value="Mountains">⛰️ Mountains</option>
+              <option value="Beaches">🏖️ Beaches</option>
+              <option value="Castles">🏰 Castles</option>
+              <option value="Amazing Pools">🏊 Amazing Pools</option>
+              <option value="Camping">⛺ Camping</option>
+              <option value="Farms">🌾 Farms</option>
+              <option value="Arctic">❄️ Arctic</option>
+              <option value="Luxury">👑 Luxury</option>
+            </select>
+            <div class="invalid-feedback">Please select a category</div>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Property Image</label>
+            <div id="uploadArea" style="border:2px dashed #d1d5db; border-radius:12px; padding:36px; text-align:center; cursor:pointer; transition:all 0.2s;">
+              <i class="fa-solid fa-cloud-arrow-up fa-2x text-muted mb-2 d-block"></i>
+              <p class="mb-1 text-muted fw-semibold">Click to upload or drag and drop</p>
+              <p class="small text-muted mb-0">PNG, JPG, WEBP — max 10MB</p>
+              <input type="file" name="image" id="imageInput" class="d-none" accept="image/*" required />
+            </div>
+            <img id="imagePreview" class="d-none mt-3 w-100" style="max-height:220px; object-fit:cover; border-radius:12px;" alt="Preview" />
+            <div class="invalid-feedback">Please upload an image</div>
+          </div>
+
+          <!-- Price + Country -->
+          <div class="row g-3 mb-4">
+            <div class="col-sm-5">
+              <label class="form-label fw-semibold">Price per Night (₹)</label>
+              <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input
+                  type="number"
+                  name="listing[price]"
+                  placeholder="2000"
+                  class="form-control"
+                  min="0"
+                  required
+                />
+              </div>
+              <div class="invalid-feedback">Enter a valid price</div>
+            </div>
+            <div class="col-sm-7">
+              <label class="form-label fw-semibold">Country</label>
+              <input
+                type="text"
+                name="listing[country]"
+                placeholder="India"
+                class="form-control"
+                style="border-radius:10px;"
+                required
+              />
+              <div class="invalid-feedback">Enter a country</div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Location / City</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+              <input
+                type="text"
+                name="listing[location]"
+                placeholder="Manali, Himachal Pradesh"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="invalid-feedback">Enter a location</div>
+          </div>
+
+          <!-- Buttons — FIXED: no rounded-pill on flex-grow, use normal width -->
+          <div class="d-flex gap-3 mt-4">
+            <button
+              type="submit"
+              class="btn btn-danger btn-lg fw-semibold flex-grow-1"
+              style="border-radius:10px; background:#fe424d; border:none;"
+            >
+              <i class="fa-solid fa-plus me-2"></i>Create Listing
+            </button>
+            <a
+              href="/listings"
+              class="btn btn-outline-secondary btn-lg fw-semibold"
+              style="border-radius:10px; min-width:120px;"
+            >
+              Cancel
+            </a>
+          </div>
+
+        </form>
       </div>
 
-      <!-- IMAGE -->
-      <div class="mb-3">
-        <label class="form-label">Upload Image</label>
-        <input
-          type="file"
-          name="listing[image]"
-          class="form-control"
-          required
-        />
-      </div>
-
-      <!-- PRICE + COUNTRY -->
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label class="form-label">Price</label>
-          <input
-            type="number"
-            name="listing[price]"
-            placeholder="Enter price"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Price should be valid</div>
-        </div>
-
-        <div class="mb-3 col-md-8">
-          <label class="form-label">Country</label>
-          <input
-            type="text"
-            name="listing[country]"
-            placeholder="Enter country"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Country should be valid</div>
-        </div>
-      </div>
-
-      <!-- LOCATION -->
-      <div class="mb-3">
-        <label class="form-label">Location</label>
-        <input
-          type="text"
-          name="listing[location]"
-          placeholder="Enter location"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Location should be valid</div>
-      </div>
-
-      <!-- CATEGORY (IMPORTANT FIX) -->
-      <div class="mb-3">
-        <label class="form-label">Category</label>
-        <select
-          name="listing[category]"
-          class="form-select"
-          required
-        >
-          <option value="">Select Category</option>
-          <option value="Trending">Trending</option>
-          <option value="Rooms">Rooms</option>
-          <option value="Iconic Cities">Iconic Cities</option>
-          <option value="Mountains">Mountains</option>
-          <option value="Castles">Castles</option>
-          <option value="Amazing Pools">Amazing Pools</option>
-          <option value="Camping">Camping</option>
-          <option value="Farms">Farms</option>
-          <option value="Arctic">Arctic</option>
-        </select>
-        <div class="invalid-feedback">Please select a category</div>
-      </div>
-
-      <!-- SUBMIT -->
-      <button class="btn btn-dark mb-3 add-btn">Add</button>
-
-    </form>
+    </div>
   </div>
 </div>
+
+<script>
+  const area    = document.getElementById("uploadArea");
+  const input   = document.getElementById("imageInput");
+  const preview = document.getElementById("imagePreview");
+
+  area.addEventListener("click", () => input.click());
+
+  area.addEventListener("dragover", e => {
+    e.preventDefault();
+    area.style.borderColor = "#fe424d";
+    area.style.background  = "#fff5f5";
+  });
+  area.addEventListener("dragleave", () => {
+    area.style.borderColor = "#d1d5db";
+    area.style.background  = "transparent";
+  });
+  area.addEventListener("drop", e => {
+    e.preventDefault();
+    area.style.borderColor = "#d1d5db";
+    area.style.background  = "transparent";
+    if (e.dataTransfer.files[0]) showPreview(e.dataTransfer.files[0]);
+  });
+
+  input.addEventListener("change", () => {
+    if (input.files[0]) showPreview(input.files[0]);
+  });
+
+  function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      preview.classList.remove("d-none");
+      area.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+</script>

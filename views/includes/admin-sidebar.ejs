@@ -1,0 +1,25 @@
+<aside class="admin-sidebar">
+  <div class="admin-brand">
+    <i class="fa-regular fa-compass"></i>
+    <span>WanderHub</span>
+    <div class="admin-badge">Admin</div>
+  </div>
+  <nav class="admin-nav">
+    <a href="/admin" class="admin-nav-item <%= typeof page !== 'undefined' && page === 'dashboard' ? 'active' : '' %>">
+      <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+    </a>
+    <a href="/admin/listings" class="admin-nav-item <%= typeof page !== 'undefined' && page === 'listings' ? 'active' : '' %>">
+      <i class="fa-solid fa-house"></i><span>Listings</span>
+    </a>
+    <a href="/admin/users" class="admin-nav-item <%= typeof page !== 'undefined' && page === 'users' ? 'active' : '' %>">
+      <i class="fa-solid fa-users"></i><span>Users</span>
+    </a>
+    <a href="/admin/bookings" class="admin-nav-item <%= typeof page !== 'undefined' && page === 'bookings' ? 'active' : '' %>">
+      <i class="fa-solid fa-calendar-check"></i><span>Bookings</span>
+    </a>
+    <hr class="my-3 border-white opacity-25" />
+    <a href="/listings" class="admin-nav-item">
+      <i class="fa-solid fa-arrow-left"></i><span>Back to Site</span>
+    </a>
+  </nav>
+</aside>
